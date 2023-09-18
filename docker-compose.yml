@@ -1,0 +1,13 @@
+version: "3"
+services:
+  # React app container
+  react-app:
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./src:/app/src # Optional: Map your source code for live development
+
+# You can add more services like a database or API if needed
