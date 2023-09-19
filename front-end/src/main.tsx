@@ -6,6 +6,10 @@ import "rsuite/dist/rsuite.min.css";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+const isDarkModePreferred = localStorage.getItem('darkModePreference') === 'true';
+
+const rootElement = document.getElementById('root');
+rootElement?.classList.add(isDarkModePreferred ? 'dark' : 'light');
 
 const queryClient = new QueryClient();
 
