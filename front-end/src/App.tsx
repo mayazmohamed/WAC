@@ -2,12 +2,30 @@ import React, { useEffect, useState } from "react";
 import logo from "./assets/images/cover.png";
 import "./App.css";
 import { useQuery } from "@tanstack/react-query";
+import fetchVideos from "./api/youtube";
+import VideoPlayer from "./components/youtube/VideoPlayer";
 
 function App() {
   const [search, setSearch] = React.useState<string>("");
   const [openInput, setOpenInput] = React.useState<boolean>(false);
   const menuref = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const [activeTab, setActiveTab] = useState(0);
+  const [dark, setDark] = useState(false);
+  const [url, setUrl] = useState<[]>([]);
+  const urls =  [
+    "https://www.youtube.com/watch?v=mCoExlG4mdE",
+    'https://www.youtube.com/watch?v=ZpiNUKpGI88&ab_channel=RubySessionsTV',
+    'https://www.youtube.com/watch?v=ZpiNUKpGI88&ab_channel=RubySessionsTV',
+    "https://www.youtube.com/watch?v=WjVNUWTW6r4&ab_channel=Manhwahub",
+    'https://www.youtube.com/watch?v=ZpiNUKpGI88&ab_channel=RubySessionsTV',
+    'https://www.youtube.com/watch?v=ZpiNUKpGI88&ab_channel=RubySessionsTV',
+    'https://www.youtube.com/watch?v=ZpiNUKpGI88&ab_channel=RubySessionsTV',
+    'https://www.youtube.com/watch?v=ZpiNUKpGI88&ab_channel=RubySessionsTV',
+    'https://www.youtube.com/watch?v=ZpiNUKpGI88&ab_channel=RubySessionsTV',
+    'https://www.youtube.com/watch?v=ZpiNUKpGI88&ab_channel=RubySessionsTV',
+    'https://www.youtube.com/watch?v=ZpiNUKpGI88&ab_channel=RubySessionsTV',
+  ]
 
   useEffect(() => {
     //check click outside
@@ -28,19 +46,30 @@ function App() {
     !openInput && setSearch("");
   }, [openInput]);
 
-  // const { data } = useQuery(
-  //   {
-  //     queryKey: ["videos"],
-  //     queryFn: async () => {
-  //       const data = await fetchVideos()
-  //       return data
-  //     }
+  useEffect(() => {
+    async function fetchVideoUrls() {
+      const urls = await fetchVideos();
+      setUrl(urls);
+    }
 
-  //   })
+    fetchVideoUrls();
+  }, []);
+  console.log("urls", url)
 
-  // console.log(data)
-  const [activeTab, setActiveTab] = useState(0);
-  const [dark, setDark] = useState(false);
+
+  
+  // useQuery({
+  //   queryKey: ['url'],
+  //   queryFn: async () => {
+  //     const data = await fetchVideos();
+  //     return data;
+  //   },
+  //   onSuccess: (data) => {
+  //     setUrl(data);
+  //     console.log( "url", url);
+  //   },
+  // });
+
 
   const handleTabClick = (tabIndex: number) => {
     setActiveTab(tabIndex);
@@ -117,13 +146,14 @@ function App() {
                   <h2>News</h2>
                 </div>
               </div>
-              <div className="p-4 h-full ">
+              <div className="p-4 h-[80%] overflow-y-scroll ">
                 <div
-                  className={`   tab-content ${
+                  className={` tab-content ${
                     activeTab === 0 ? "" : "hidden"
                   }`}
                 >
-                  Content for Tab 1
+                  
+                    <VideoPlayer videoUrls={url} />
                 </div>
                 <div
                   className={`tab-content ${activeTab === 1 ? "" : "hidden"}`}
